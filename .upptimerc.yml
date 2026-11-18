@@ -12,9 +12,33 @@ sites:
 
 assignees: []
 
+# Dates as DD/MM/YYYY.
+i18n:
+  locale: en-AU
+
+# History page response-time chart (brand Signal Viridian and its soft tint).
+graphBorderColor: "#006f53"
+graphBackgroundColor: "rgba(0, 111, 83, 0.12)"
+
 status-website:
   cname: status.everywealth.com.au
+  # Assets use full URLs: the site build crawls relative links in <head> and writes 404 folders
+  # over those paths, which then shadow the files copied in from assets/.
   name: EveryWealth status
+  logoUrl: https://status.everywealth.com.au/logo-on-light.png
+  hideNavTitle: true
+  favicon: https://status.everywealth.com.au/favicon-32x32.png
+  themeUrl: https://status.everywealth.com.au/everywealth-theme.css
+  customHeadHtml: >-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  links:
+    - rel: apple-touch-icon
+      href: https://status.everywealth.com.au/apple-touch-icon.png
+  metaTags:
+    - name: description
+      content: Live status of the EveryWealth app, mobile API and website.
   introTitle: "EveryWealth service status"
   introMessage: Current status of EveryWealth services, checked every five minutes.
   navbar:
