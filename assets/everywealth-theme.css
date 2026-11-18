@@ -1,0 +1,195 @@
+/* EveryWealth theme for Upptime. Colours mirror ew-monorepo/packages/brand/brand.css:
+   update them there first, then here. */
+:root {
+  --body-background-color: #fafafa; /* paper */
+  --body-text-color: #22262b; /* ink */
+  --card-background-color: #ffffff;
+  --card-border-color: #dbdee1; /* hairline */
+  --nav-background-color: #fafafa;
+  --nav-border-bottom-color: #dbdee1;
+  --nav-current-border-bottom-color: #006f53; /* signal */
+  --up-border-left-color: #006f53;
+  --down-border-left-color: #bf5542; /* flag */
+  --down-background-color: rgba(191, 85, 66, 0.08); /* flag-soft */
+  --degraded-border-left-color: #22262b; /* ink: maintenance and degraded stand apart from Signal "up" without borrowing Flag */
+  --tag-color: #ffffff;
+  --tag-up-background-color: #006f53;
+  --tag-down-background-color: #9c4536; /* flag-ink: white text passes AA */
+  --tag-degraded-background-color: #5f6469;
+  --change-background-color: #7b8186;
+  --error-button-border-color: #22262b;
+  --error-button-background-color: #22262b;
+  --error-button-color: #fafafa;
+  --submit-button-border-color: #22262b;
+  --submit-button-background-color: #22262b;
+  --submit-button-color: #fafafa;
+  --graph-opacity: 1;
+  --graph-filter: none;
+  --ew-notice: #eef0f1;
+  --ew-muted: #5f6469; /* faint fails AA at label size; this passes */
+  --ew-spark: rgba(0, 111, 83, 0.2); /* signal tint for sparklines */
+  --ew-logo: url("logo-on-light.png");
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --body-background-color: #22262b;
+    --body-text-color: #eff2f4;
+    --card-background-color: #2a2f34;
+    --card-border-color: #3d4348;
+    --nav-background-color: #22262b;
+    --nav-border-bottom-color: #3d4348;
+    --nav-current-border-bottom-color: #00e5af; /* signal mint */
+    --up-border-left-color: #00e5af;
+    --down-border-left-color: #d68272;
+    --down-background-color: #35292a;
+    --degraded-border-left-color: #eff2f4;
+    --tag-color: #22262b;
+    --tag-up-background-color: #00e5af;
+    --tag-down-background-color: #d68272;
+    --tag-degraded-background-color: #a3a9ae;
+    --change-background-color: #a3a9ae;
+    --error-button-border-color: #eff2f4;
+    --error-button-background-color: #eff2f4;
+    --error-button-color: #22262b;
+    --submit-button-border-color: #eff2f4;
+    --submit-button-background-color: #eff2f4;
+    --submit-button-color: #22262b;
+    --graph-opacity: 1;
+    --graph-filter: none;
+    --ew-notice: #33393e;
+    --ew-muted: #a3a9ae;
+    --ew-spark: rgba(0, 229, 175, 0.16);
+    --ew-logo: url("logo-on-dark.png");
+  }
+}
+
+/* html-prefixed so these beat Upptime's global.css, which loads after this file. */
+html body {
+  font-family: Geist, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+html h1,
+html h2 {
+  letter-spacing: -0.035em;
+  font-weight: 600;
+}
+
+/* Nav sizing comes from Upptime's own Nav.svelte; only swap the logo for dark mode. */
+html nav .logo img {
+  content: var(--ew-logo);
+}
+
+/* Upptime's 300 weight isn't a Geist weight we load and reads thin. */
+html nav {
+  font-weight: 500 !important;
+}
+
+/* !important: Nav.svelte's scoped styles outrank any selector a theme file can use.
+   Shrinks the nav so every link fits on a phone instead of scrolling sideways. */
+@media (max-width: 600px) {
+  html nav {
+    padding: 0 !important;
+  }
+  html nav .logo {
+    margin-right: 0.5rem !important;
+  }
+  html nav .logo img {
+    height: 2rem !important;
+    margin-right: 0 !important;
+  }
+  html nav ul a {
+    padding: 1.25rem 0.75rem !important;
+  }
+}
+
+html article {
+  border-radius: 10px;
+}
+
+/* Mono kicker labels, as on the product. */
+html .tag {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Figures stay in the body face so they sit cleanly beside their labels. */
+html .data {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Active maintenance or degradation notice: tinted so it reads apart from the service cards. */
+html article.degraded-active {
+  background: var(--ew-notice);
+}
+
+/* Response-time sparklines. Upptime's PNGs are fixed teal, so use them as a mask and fill
+   with a soft Signal tint: a quiet trend behind the text, not a block of colour.
+   !important: LiveStatus.svelte sets the image with a scoped selector. */
+html section.live-status article.graph {
+  position: relative;
+  isolation: isolate;
+  background-image: none !important;
+}
+html section.live-status article.graph::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background-color: var(--ew-spark);
+  -webkit-mask: var(--background) right center / contain no-repeat;
+  mask: var(--background) right center / contain no-repeat;
+}
+
+/* 24h / 7d / 30d / 1y / all switch as a segmented control. Upptime hides the radios with
+   display:none, which takes them out of the keyboard order; keep them focusable instead. */
+html form.r input {
+  display: block !important;
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+html form.r label {
+  margin-left: 0.25rem !important;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ew-muted);
+  cursor: pointer;
+}
+html form.r input:checked + label {
+  font-weight: 500 !important;
+  color: var(--body-text-color);
+  background: var(--card-background-color);
+  box-shadow: inset 0 0 0 1px var(--card-border-color);
+}
+html form.r input:focus-visible + label {
+  outline: 2px solid var(--nav-current-border-bottom-color);
+  outline-offset: 2px;
+}
+
+html a {
+  transition: color 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html :focus-visible {
+  outline: 2px solid var(--nav-current-border-bottom-color);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
