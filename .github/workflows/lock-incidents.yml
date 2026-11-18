@@ -1,0 +1,17 @@
+# Ours, not Upptime's: kept in its own file because update-template.yml
+# overwrites Upptime's workflows. Locks every new issue so only collaborators
+# can comment on incident and maintenance notices.
+name: Lock new issues
+on:
+  issues:
+    types: [opened]
+permissions:
+  issues: write
+jobs:
+  lock:
+    runs-on: ubuntu-latest
+    steps:
+      - run: gh issue lock "$NUMBER" --repo "$GITHUB_REPOSITORY"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NUMBER: ${{ github.event.issue.number }}
